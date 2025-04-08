@@ -1,6 +1,6 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 78
+    Help Height: 277
     Name: Displays
     Property Tree Widget:
       Expanded:
@@ -9,7 +9,7 @@ Panels:
         - /RobotModel1
         - /Marker1
       Splitter Ratio: 0.5
-    Tree Height: 527
+    Tree Height: 328
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -218,10 +218,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2603980302810669
+      Pitch: 0.25039809942245483
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.8535871505737305
+      Yaw: 0.010402733460068703
     Saved: ~
 Window Geometry:
   Displays:
@@ -239,5 +239,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1534
-  X: 786
+  X: 66
   Y: 32
