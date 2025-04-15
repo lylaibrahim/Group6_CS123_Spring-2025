@@ -178,14 +178,23 @@ class InverseKinematics(Node):
 
         # return np.interp(t % 3, [0, 1, 2, 3], [self.ee_triangle_positions[0], self.ee_triangle_positions[1], self.ee_triangle_positions[2], self.ee_triangle_positions[0]])
 
-        state = t % 3
+        # state = t % 3
 
-        if 0 <= state < 1:
-            return np.interp(state, [0, 1], [self.ee_triangle_positions[0], self.ee_triangle_positions[1]])
-        elif 1 <= state < 2:
-            return np.interp(state, [1, 2], [self.ee_triangle_positions[1], self.ee_triangle_positions[2]])
-        else:
-            return np.interp(state, [2, 3], [self.ee_triangle_positions[2], self.ee_triangle_positions[0]])
+        # if 0 <= state < 1:
+        #     return np.interp(state, [0, 1], [self.ee_triangle_positions[0], self.ee_triangle_positions[1]])
+        # elif 1 <= state < 2:
+        #     return np.interp(state, [1, 2], [self.ee_triangle_positions[1], self.ee_triangle_positions[2]])
+        # else:
+        #     return np.interp(state, [2, 3], [self.ee_triangle_positions[2], self.ee_triangle_positions[0]])
+
+        state = t % 3
+        i = int(state)  
+        alpha = state - i 
+
+        p0 = self.ee_triangle_positions[i]
+        p1 = self.ee_triangle_positions[(i + 1) % 3]
+        return (1 - alpha) * p0 + alpha * p1
+
 
 
     def ik_timer_callback(self):
