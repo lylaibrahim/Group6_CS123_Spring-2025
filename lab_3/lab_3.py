@@ -124,21 +124,29 @@ class InverseKinematics(Node):
             L1_error = [np.abs(cur_ee[0] - target_ee[0]), np.abs(cur_ee[1] - target_ee[1]), np.abs(cur_ee[2] - target_ee[2])]
 
             # Return the sum of squared L1 distances as the cost (AKA the squared L2 norm of the error vector).
-            cost = L1_error[0] ** 2 + L1_error[1] ** 2 + L1_error[2] ** 2
+            L2_cost = L1_error[0] ** 2 + L1_error[1] ** 2 + L1_error[2] ** 2
 
-            return cost, L1_error
+            return L2_cost, np.array(L1_error)
 
         def gradient(theta, epsilon=1e-3):
             # Compute the gradient of the cost function using finite differences
             ################################################################################################
             # TODO: Implement the gradient computation
             ################################################################################################
-            return
+            fq = self.forward_kinematics(*theta)
+
+            d_1 = ( self.forward_kinematics(*theta + np.array([epsilon, 0, 0])) - fq ) / epsilon
+
+            d_2 = ( self.forward_kinematics(*theta + np.array([0, epsilon, 0])) - fq ) / epsilon
+
+            d_3 = ( self.forward_kinematics(*theta + np.array([0, 0, epsilon])) - fq ) / epsilon
+
+            return np.array([d_1, d_2, d_3])
 
         theta = np.array(initial_guess)
-        learning_rate = None # TODO: Set the learning rate
-        max_iterations = None # TODO: Set the maximum number of iterations
-        tolerance = None # TODO: Set the tolerance for the L1 norm of the error
+        learning_rate = 0.05 # TODO: Set the learning rate
+        max_iterations = 200 # TODO: Set the maximum number of iterations
+        tolerance = 1e-16 # TODO: Set the tolerance for the L1 norm of the error
 
         cost_l = []
         for _ in range(max_iterations):
@@ -151,6 +159,12 @@ class InverseKinematics(Node):
             # TODO (BONUS): Implement the (quasi-)Newton's method instead of finite differences for faster convergence
             ################################################################################################
 
+            if np.mean(cost_function(theta)[1]) < tolerance:
+                break
+
+            # gradient descent
+            theta = theta - learning_rate * grad 
+
         # print(f'Cost: {cost_l}') # Use to debug to see if you cost function converges within max_iterations
 
         return theta
@@ -161,7 +175,18 @@ class InverseKinematics(Node):
         ################################################################################################
         # TODO: Implement the interpolation function
         ################################################################################################
-        return
+
+        # return np.interp(t % 3, [0, 1, 2, 3], [self.ee_triangle_positions[0], self.ee_triangle_positions[1], self.ee_triangle_positions[2], self.ee_triangle_positions[0]])
+
+        state = t % 3
+
+        if 0 <= state < 1:
+            return np.interp(state, [0, 1], [self.ee_triangle_positions[0], self.ee_triangle_positions[1]])
+        elif 1 <= state < 2:
+            return np.interp(state, [1, 2], [self.ee_triangle_positions[1], self.ee_triangle_positions[2]])
+        else:
+            return np.interp(state, [2, 3], [self.ee_triangle_positions[2], self.ee_triangle_positions[0]])
+
 
     def ik_timer_callback(self):
         if self.joint_positions is not None:
@@ -173,6 +198,7 @@ class InverseKinematics(Node):
             ################################################################################################
             # TODO: Implement the time update
             ################################################################################################
+            self.t += self.ik_timer
             
             self.get_logger().info(f'Target EE: {target_ee}, Current EE: {current_ee}, Target Angles: {self.target_joint_positions}, Target Angles to EE: {self.forward_kinematics(*self.target_joint_positions)}, Current Angles: {self.joint_positions}')
 
