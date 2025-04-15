@@ -25,15 +25,14 @@ class InverseKinematics(Node):
             10
         )
 
-        self.pd_timer_period = 1.0 / 200  # 200 Hz
-        self.ik_timer_period = 1.0 / 20   # 10 Hz
+        self.pd_timer_period = 0.5 / 200  # 200 Hz
+        self.ik_timer_period = 0.5 / 20   # 10 Hz
         self.pd_timer = self.create_timer(self.pd_timer_period, self.pd_timer_callback)
         self.ik_timer = self.create_timer(self.ik_timer_period, self.ik_timer_callback)
 
         self.joint_positions = None
         self.joint_velocities = None
         self.target_joint_positions = None
-
         self.ee_triangle_positions = np.array([
             [0.05, 0.0, -0.12],  # Touchdown
             [-0.05, 0.0, -0.12], # Liftoff
@@ -108,7 +107,7 @@ class InverseKinematics(Node):
         return end_effector_position
 
 
-    def inverse_kinematics(self, target_ee, initial_guess=[0, 0, 0]):
+    def inverse_kinematics(self, target_ee, initial_guess=[1., 1., 1.]):
         def cost_function(theta):
             # Compute the cost function and the L1 norm of the error
             # return the cost and the L1 norm of the error
@@ -118,7 +117,9 @@ class InverseKinematics(Node):
             ################################################################################################
             
             # Use the forward_kinematics method to get the current end-effector position.
+            print("start")
             cur_ee = self.forward_kinematics(*theta) # vector of 3
+            print("done")
 
             # Calculate the L1 distance between the current and target end-effector positions.
             L1_error = [np.abs(cur_ee[0] - target_ee[0]), np.abs(cur_ee[1] - target_ee[1]), np.abs(cur_ee[2] - target_ee[2])]
@@ -133,19 +134,20 @@ class InverseKinematics(Node):
             ################################################################################################
             # TODO: Implement the gradient computation
             ################################################################################################
-            fq = self.forward_kinematics(*theta)
+            print("THETA", *theta)
+            fq = cost_function(theta)[0]
 
-            d_1 = ( self.forward_kinematics(*theta + np.array([epsilon, 0, 0])) - fq ) / epsilon
+            d_1 = ( cost_function(theta + np.array([epsilon, 0, 0]))[0] - fq ) / epsilon
 
-            d_2 = ( self.forward_kinematics(*theta + np.array([0, epsilon, 0])) - fq ) / epsilon
+            d_2 = ( cost_function(theta + np.array([0, epsilon, 0]))[0] - fq ) / epsilon
 
-            d_3 = ( self.forward_kinematics(*theta + np.array([0, 0, epsilon])) - fq ) / epsilon
+            d_3 = ( cost_function(theta + np.array([0, 0, epsilon]))[0] - fq ) / epsilon
 
             return np.array([d_1, d_2, d_3])
 
         theta = np.array(initial_guess)
         learning_rate = 10 # TODO: Set the learning rate
-        max_iterations = 200 # TODO: Set the maximum number of iterations
+        max_iterations = 50 # TODO: Set the maximum number of iterations
         tolerance = 0.001 # TODO: Set the tolerance for the L1 norm of the error
 
         cost_l = []
@@ -163,7 +165,9 @@ class InverseKinematics(Node):
                 break
 
             # gradient descent
+            print("grad", grad)
             theta = theta - learning_rate * grad 
+            print("new theta", theta)
 
         # print(f'Cost: {cost_l}') # Use to debug to see if you cost function converges within max_iterations
 
@@ -207,7 +211,7 @@ class InverseKinematics(Node):
             ################################################################################################
             # TODO: Implement the time update
             ################################################################################################
-            self.t += self.ik_timer
+            self.t += self.ik_timer_period
             
             self.get_logger().info(f'Target EE: {target_ee}, Current EE: {current_ee}, Target Angles: {self.target_joint_positions}, Target Angles to EE: {self.forward_kinematics(*self.target_joint_positions)}, Current Angles: {self.joint_positions}')
 
