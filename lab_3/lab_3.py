@@ -144,9 +144,9 @@ class InverseKinematics(Node):
             return np.array([d_1, d_2, d_3])
 
         theta = np.array(initial_guess)
-        learning_rate = 0.05 # TODO: Set the learning rate
+        learning_rate = 10 # TODO: Set the learning rate
         max_iterations = 200 # TODO: Set the maximum number of iterations
-        tolerance = 1e-16 # TODO: Set the tolerance for the L1 norm of the error
+        tolerance = 0.001 # TODO: Set the tolerance for the L1 norm of the error
 
         cost_l = []
         for _ in range(max_iterations):
