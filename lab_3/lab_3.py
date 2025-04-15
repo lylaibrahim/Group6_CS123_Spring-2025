@@ -116,7 +116,17 @@ class InverseKinematics(Node):
             # TODO: Implement the cost function
             # HINT: You can use the * notation on a list to "unpack" a list
             ################################################################################################
-            return None, None
+            
+            # Use the forward_kinematics method to get the current end-effector position.
+            cur_ee = self.forward_kinematics(*theta) # vector of 3
+
+            # Calculate the L1 distance between the current and target end-effector positions.
+            L1_error = [np.abs(cur_ee[0] - target_ee[0]), np.abs(cur_ee[1] - target_ee[1]), np.abs(cur_ee[2] - target_ee[2])]
+
+            # Return the sum of squared L1 distances as the cost (AKA the squared L2 norm of the error vector).
+            cost = L1_error[0] ** 2 + L1_error[1] ** 2 + L1_error[2] ** 2
+
+            return cost, L1_error
 
         def gradient(theta, epsilon=1e-3):
             # Compute the gradient of the cost function using finite differences
