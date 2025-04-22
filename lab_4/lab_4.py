@@ -61,11 +61,25 @@ class InverseKinematics(Node):
         self.counter = 0
 
         # Trotting gate positions, already implemented
-        touch_down_position = np.array([0.05, 0.0, -0.14])
-        stand_position_1 = np.array([0.025, 0.0, -0.14])
+        # touch_down_position = np.array([0.05, 0.0, -0.14])
+        # stand_position_1 = np.array([0.025, 0.0, -0.14])
+        # stand_position_2 = np.array([0.0, 0.0, -0.14])
+        # stand_position_3 = np.array([-0.025, 0.0, -0.14])
+        # liftoff_position = np.array([-0.05, 0.0, -0.14])
+        # mid_swing_position = np.array([0.0, 0.0, -0.05])
+
+        # touch_down_position = np.array([0.1, 0.0, -0.14])
+        # stand_position_1 = np.array([0.05, 0.0, -0.14])
+        # stand_position_2 = np.array([0.0, 0.0, -0.14])
+        # stand_position_3 = np.array([-0.05, 0.0, -0.14])
+        # liftoff_position = np.array([-0.1, 0.0, -0.14])
+        # mid_swing_position = np.array([0.0, 0.0, -0.05])
+
+        touch_down_position = np.array([0.002, 0.0, -0.14])
+        stand_position_1 = np.array([0.001, 0.0, -0.14])
         stand_position_2 = np.array([0.0, 0.0, -0.14])
-        stand_position_3 = np.array([-0.025, 0.0, -0.14])
-        liftoff_position = np.array([-0.05, 0.0, -0.14])
+        stand_position_3 = np.array([-0.001, 0.0, -0.14])
+        liftoff_position = np.array([-0.002, 0.0, -0.14])
         mid_swing_position = np.array([0.0, 0.0, -0.05])
         
         ## trotting
