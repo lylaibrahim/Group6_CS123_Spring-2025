@@ -69,20 +69,20 @@ class InverseKinematics(Node):
         # mid_swing_position = np.array([0.0, 0.0, -0.05])
 
         # Fast
-        # touch_down_position = np.array([0.1, 0.0, -0.14])
-        # stand_position_1 = np.array([0.05, 0.0, -0.14])
-        # stand_position_2 = np.array([0.0, 0.0, -0.14])
-        # stand_position_3 = np.array([-0.05, 0.0, -0.14])
-        # liftoff_position = np.array([-0.1, 0.0, -0.14])
-        # mid_swing_position = np.array([0.0, 0.0, -0.05])
+        touch_down_position = np.array([0.1, 0.0, -0.14])
+        stand_position_1 = np.array([0.05, 0.0, -0.14])
+        stand_position_2 = np.array([0.0, 0.0, -0.14])
+        stand_position_3 = np.array([-0.05, 0.0, -0.14])
+        liftoff_position = np.array([-0.1, 0.0, -0.14])
+        mid_swing_position = np.array([0.0, 0.0, -0.05])
 
         # Slow
-        touch_down_position = np.array([0.005, 0.0, -0.14])
-        stand_position_1 = np.array([0.002, 0.0, -0.14])
-        stand_position_2 = np.array([0.0, 0.0, -0.14])
-        stand_position_3 = np.array([-0.002, 0.0, -0.14])
-        liftoff_position = np.array([-0.005, 0.0, -0.14])
-        mid_swing_position = np.array([0.0, 0.0, -0.05])
+        # touch_down_position = np.array([0.02, 0.0, -0.14])
+        # stand_position_1 = np.array([0.01, 0.0, -0.14])
+        # stand_position_2 = np.array([0.0, 0.0, -0.14])
+        # stand_position_3 = np.array([-0.01, 0.0, -0.14])
+        # liftoff_position = np.array([-0.02, 0.0, -0.14])
+        # mid_swing_position = np.array([0.0, 0.0, -0.05])
 
         # Diamond
         # touch_down_position = np.array([0.05, 0.0, -0.14])
