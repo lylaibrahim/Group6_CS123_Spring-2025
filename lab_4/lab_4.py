@@ -122,7 +122,7 @@ class InverseKinematics(Node):
         ################################################################################################
         T_LF_0_1 = translation(0.07500, 0.08350, 0) @ rotation_x(1.57080) @ rotation_z(-theta[0])
         T_LF_1_2 = rotation_y(-1.57080) @ rotation_z(theta[1])
-        T_LF_2_3 = translation(0, -0.04940, 0.06850) @ rotation_y(1.57080) @ rotation_z(theta[2]) # could be wrong
+        T_LF_2_3 = translation(0, -0.04940, 0.06850) @ rotation_y(1.57080) @ rotation_z(-theta[2]) # could be wrong
         T_LF_3_ee = translation(0.06231, -0.06216, -0.01800)
         T_LF_0_ee = T_LF_0_1 @ T_LF_1_2 @ T_LF_2_3 @ T_LF_3_ee
         return T_LF_0_ee[:3, 3]
@@ -131,7 +131,7 @@ class InverseKinematics(Node):
         ################################################################################################
         # TODO: implement forward kinematics here
         ################################################################################################
-        T_RB_0_1 = translation(-0.07500, -0.08350, 0) @ rotation_x(1.57080) @ rotation_z(theta[0])
+        T_RB_0_1 = translation(-0.07500, -0.07250, 0) @ rotation_x(1.57080) @ rotation_z(theta[0])
         T_RB_1_2 = rotation_y(-1.57080) @ rotation_z(theta[1])
         T_RB_2_3 = translation(0, -0.04940, 0.06850) @ rotation_y(1.57080) @ rotation_z(theta[2])
         T_RB_3_ee = translation(0.06231, -0.06216, 0.01800)
@@ -142,9 +142,9 @@ class InverseKinematics(Node):
         ################################################################################################
         # TODO: implement forward kinematics here
         ################################################################################################
-        T_LB_0_1 = translation(-0.07500, 0.08350, 0) @ rotation_x(1.57080) @ rotation_z(-theta[0])
+        T_LB_0_1 = translation(-0.07500, 0.072500, 0) @ rotation_x(1.57080) @ rotation_z(-theta[0])
         T_LB_1_2 = rotation_y(-1.57080) @ rotation_z(theta[1])
-        T_LB_2_3 = translation(0, -0.04940, 0.06850) @ rotation_y(1.57080) @ rotation_z(theta[2]) # could be wrong
+        T_LB_2_3 = translation(0, -0.04940, 0.06850) @ rotation_y(1.57080) @ rotation_z(-theta[2]) # could be wrong
         T_LB_3_ee = translation(0.06231, -0.06216, -0.01800)
         T_LB_0_ee = T_LB_0_1 @ T_LB_1_2 @ T_LB_2_3 @ T_LB_3_ee
         return T_LB_0_ee[:3, 3]
@@ -207,6 +207,7 @@ class InverseKinematics(Node):
             ################################################################################################
             grad = gradient(theta)
             if np.mean(cost_function(theta)[1]) < tolerance:
+                print("hi")
                 break
             theta = theta - learning_rate * grad 
 
@@ -216,8 +217,8 @@ class InverseKinematics(Node):
         ################################################################################################
         # TODO: implement interpolation for all 4 legs here
         ################################################################################################
-        
-        state = t % 6
+        # print(len(self.ee_triangle_positions[leg_index]))
+        state = (t*6) % 6
         i = int(state)  
         alpha = state - i 
 
