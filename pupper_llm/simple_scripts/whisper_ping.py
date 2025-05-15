@@ -4,7 +4,8 @@ from std_msgs.msg import String
 import sounddevice as sd
 from openai import OpenAI
 
-client = OpenAI(api_key='TODO')
+client = OpenAI(api_key='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')
+
 import numpy as np
 import time
 import io
@@ -29,9 +30,14 @@ class CommandLinePublisher(Node):
     # TODO: Implement the publish_message method
     # message is a string that contains the user query. You can publish it using the publisher_ and its publish method
     def publish_message(self, message):
-        # Create a String message and publish it
-        pass
-        # Copy implementation from the command_line_publisher.py script
+        
+        # Create a String message and publish it with the message as the data
+        msg = String()
+        msg.data = message
+        self.publisher_.publish(msg)
+
+        # DEBUG LOGGER: Uncomment the following line to print the message (you may have to change the variable name)
+        # self.get_logger().info(f"Published message: {message}")
             
     def transcribe_audio_with_whisper(self, filename, sample_rate=16000):
         try:

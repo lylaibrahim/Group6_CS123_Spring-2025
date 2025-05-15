@@ -4,8 +4,9 @@ from std_msgs.msg import String
 import pyttsx3
 from openai import OpenAI
 import karel  # Importing your KarelPupper API
+import json
 
-client = OpenAI(api_key='TODO')  # Set your OpenAI API key here
+client = OpenAI(api_key='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')
 
 class GPT4ConversationNode(Node):
     def __init__(self):
@@ -38,7 +39,23 @@ class GPT4ConversationNode(Node):
     # TODO: Implement the query_callback method
     # msg is a String message object that contains the user query. You can extract the query using msg.data
     def query_callback(self, msg):
-        pass
+        # Extract the user query from the message using the data attribute of message
+        user_query = msg.data
+
+        # Call GPT-4o API to get the response. Use the get_gpt4_response method and pass in the query
+        response = self.get_gpt4_response(user_query)
+
+        # Publish the response (as the data to a String message) using self.publisher_ and its publish method, 
+
+        # Publish the response to the ROS2 topic
+        msg = String()
+        msg.data = response
+        self.publisher_.publish(msg)
+        
+        # DEBUG LOGGERS: Uncomment the following line to print the query and response (you may have to change the variable names)
+        
+        self.get_logger().info(f"Received user query: {user_query}") 
+        self.get_logger().info(f"Published GPT-4o response: {response}")
         # Paste in your implementation from simple_gpt_chat.py
         
         # Play the response through the speaker with the play_response method
@@ -49,7 +66,22 @@ class GPT4ConversationNode(Node):
     def get_gpt4_response(self, query):
         try:
             # Making the API call to GPT-4o using OpenAI's Python client
-            prompt = "TODO"
+            prompt = """You are a helpful robot dog assistant called pupper.
+                        Based on the user's command, suggest simple, high-level actions that pupper should take.
+                        The format should be in a commas, do not output any natural language instructions.
+                        Each item should be one of these commands below, without any other text:
+                            - move
+                            - turn_left
+                            - turn_right
+                            - bark
+                            - stop
+                        The format should always be the command seperated by commas, no spaces. Some possible respnses include:
+                        move
+
+                        turn_left,move,stop,bark
+                        bark,stop
+                        
+            """
             self.get_logger().info(f"Initial Prompt: {prompt}")
             response = client.chat.completions.create(model="gpt-4o",  # Model identifier, assuming GPT-4o is used
             messages=[
@@ -78,7 +110,18 @@ class GPT4ConversationNode(Node):
         # Convert the response to lowercase to handle case-insensitivity
         response = response.lower()
         self.get_logger().info(f"Response: {response}")
-        # TODO: Implement the robot command execution logic, in a large if-else statement. Your conditionals should be set based on the expected commands from GPT-4o, and the corresponding methods should be called on the KarelPupper object.
+        commands = response.split(",")
+        for command in commands:
+            if command == "move":
+                self.pupper.move()
+            elif command == "turn_left":
+                self.pupper.turn_left()
+            elif command == "turn_right":
+                self.pupper.turn_right()
+            elif command == "bark":
+                self.pupper.bark()
+            else:
+                self.pupper.stop()
         pass
 
 def main(args=None):
