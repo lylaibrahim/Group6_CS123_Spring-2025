@@ -6,7 +6,7 @@ A detailed diagram, our demo video, and more information can be found in the sli
 
 Instructions to run the code:
 1. Connect headset (IMU board) to a local Macbook using cables.
-2. On the Macbook, run imu_reader.py and command_publisher.py.
+2. On the Macbook, run imu_reader.py and command_publisher.py (in two separate terminals).
 3. On Pupper, run ./launch_vr.sh.
 4. On Macbook, open Foxglove and pick the stereo image option.
 5. Facetime a phone while screensharing the stereo camera feed, and place the phone in the VR headset for display.
