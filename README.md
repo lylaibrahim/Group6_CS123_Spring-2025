@@ -16,3 +16,10 @@ Installation and dependencies:
 - install foxglove application
 - pip install pyserial
 
+Code Documentation:
+- imu_reader.sh (on Macbook): reads quaternion coordinates from the IMU board, and parses it into roll, pitch, yaw, which are then used to determine the correct pupper movements
+- command_publisher.sh (on Macbook): establishes UDP connection with pupper to send the movement commands (linear and angular velocity), which are read from a file that imu_reader wrote the commands to
+- launch_vs.sh (on Pupper): a launch file that launches ROS and runs the files listener.py and stereo_image_publisher.py
+- listener.py (on Pupper): listens to the movement commands send from command_publisher.sh and turns them into ROS instructions to move pupper accordingly
+- stereo_image_publisher.py (on Pupper): takes pupper's camera feed and split it into two circluar views for VR, which are then read by foxglove on the Macbook (similar to lab 6: vision lab).
+Notes: we didn't get a chance to push the code on pupper to github since they were returned after demo day.
