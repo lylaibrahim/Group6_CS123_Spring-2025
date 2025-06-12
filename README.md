@@ -22,4 +22,5 @@ Code Documentation:
 - launch_vs.sh (on Pupper): a launch file that launches ROS and runs the files listener.py and stereo_image_publisher.py
 - listener.py (on Pupper): listens to the movement commands send from command_publisher.sh and turns them into ROS instructions to move pupper accordingly
 - stereo_image_publisher.py (on Pupper): takes pupper's camera feed and split it into two circluar views for VR, which are then read by foxglove on the Macbook (similar to lab 6: vision lab).
-Notes: we didn't get a chance to push the code on pupper to github since they were returned after demo day.
+
+Note: we didn't get a chance to push the code on pupper to github since they were returned after demo day.
